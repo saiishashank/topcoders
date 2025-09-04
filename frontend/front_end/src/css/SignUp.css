@@ -1,0 +1,124 @@
+/* --- Global Styles & Theme --- */
+:root {
+  --primary-blue: #007bff;
+  --light-blue-hover: #3da9fc;
+  --background-blue: #eef7ff;
+  --text-dark: #333;
+  --text-light: #777;
+  --border-color: #ddd;
+  --white-color: #ffffff;
+  --error-color: #d93025;
+  --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Apply a background to the whole page and center the form */
+/* You might want to put this in your global index.css file */
+body {
+  background-color: var(--background-blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  padding: 20px;
+}
+
+/* --- Form Container --- */
+.signup-container {
+  background-color: var(--white-color);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.signup-container h1 {
+  color: var(--text-dark);
+  margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.signup-container p {
+  color: var(--text-light);
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+/* --- Input Fields --- */
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+}
+
+/* --- Error Message Styling --- */
+.error-message {
+  color: var(--error-color);
+  font-size: 12px;
+  padding-top: 4px;
+  display: block;
+}
+
+/* --- Submit Button --- */
+.signup-button {
+  width: 100%;
+  padding: 14px;
+  background-color: var(--primary-blue);
+  color: var(--white-color);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.signup-button:hover {
+  background-color: var(--light-blue-hover);
+}
+
+.signup-button:active {
+  transform: scale(0.98);
+}
+
+/* --- Bottom Link --- */
+.login-link {
+  margin-top: 25px;
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.login-link a {
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}

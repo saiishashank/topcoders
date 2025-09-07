@@ -1,0 +1,29 @@
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 2rem;
+}
+
+.title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.chartContainer {
+  flex-grow: 1;
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+}
+
+.errorText {
+  color: red;
+  text-align: center;
+  padding-top: 2rem;
+}

@@ -5,6 +5,7 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Homepage from './pages/HomePage';
 import Dashboard from './components/Dashboard';
+import RatingGraph from './pages/ratinggraph';
 function App() {
   return (
     <>
@@ -16,6 +17,7 @@ function App() {
         <Route path='/signup' element={<SignUp/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
+        <Route path='/graph' element={<RatingGraph token={localStorage.getItem("token")}/>}/>
       </Routes>
       
     </>

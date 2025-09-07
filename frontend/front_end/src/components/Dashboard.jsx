@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../css/Dashboard.css";
-
+import { Link } from "react-router-dom";
 function Dashboard() {
   // State to hold the combined user and rating data
-  const [userData, setUserData] = useState([]); 
+  const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -24,7 +24,8 @@ function Dashboard() {
           }
         );
         // The response.data.users is the array we need
-        setUserData(response.data.users); 
+        setUserData(response.data.users);
+        console.log(response.data.users);
       } catch (err) {
         setError("Failed to fetch user ratings. Please try again later.");
         console.error("Error fetching data:", err);
@@ -54,6 +55,7 @@ function Dashboard() {
 
   return (
     <div className="dashboard-container">
+    <h4><Link to="/graph">Rating Graph</Link></h4>
       <div className="table-wrapper">
         <table className="users-table">
           <thead>
@@ -67,11 +69,11 @@ function Dashboard() {
             {/* Map directly over the userData state */}
             {userData.map((user) => (
               // Use a unique property like username for the key
-              <tr key={user.username}> 
+              <tr key={user.username}>
                 <td>{user.username}</td>
                 {/* Access the rating properties directly from the user object */}
-                <td>{user.codeforcesrating}</td>
-                <td>{user.codechefrating}</td>
+                <td>{user.codeforces_rating}</td>
+                <td>{user.codechef_rating}</td>
               </tr>
             ))}
           </tbody>

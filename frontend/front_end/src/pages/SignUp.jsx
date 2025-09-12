@@ -29,6 +29,7 @@ function SignUp() {
   };
 
   return (
+    <div className="signup-page">
     <div className="signup-container">
       <h1>Create Account</h1>
       <p>Join our community and start your journey!</p>
@@ -131,7 +132,7 @@ function SignUp() {
         </p>
       </div>
     </div>
-  );
-}
+  </div>
+)};
 
 export default SignUp;

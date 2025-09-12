@@ -1,28 +1,38 @@
-const scrapingbee = require("scrapingbee");
-const cheerio = require("cheerio"); // for parsing HTML
-
+const puppeteer = require("puppeteer");
 async function scrapeCodechefRating(username) {
-  const client = new scrapingbee.ScrapingBeeClient("GPEF4Y7OZ8RSZ5DUXIJCNPFIIASUTGE3YVXSC36YH61Q1MS9CERAER4JPQGDGYEEFBYS8ULCX63L31VT"); // replace with your key
-  const url = `https://www.codechef.com/users/${username}`;
+ 
+  let browser;
 
   try {
-    const response = await client.get({
-      url: url,
-      params: {
-        render_js: "true", // CodeChef sometimes requires JS rendering
-      },
+    browser = await puppeteer.launch({
+    
+      headless: "new",
     });
 
-    const decoder = new TextDecoder();
-    const html = decoder.decode(response.data);
+    const page = await browser.newPage();
+    const url = `https://www.codechef.com/users/${username}`;
 
-    const $ = cheerio.load(html);
-    const rating = $(".rating-number").first().text().trim();
+  
+    await page.goto(url, { waitUntil: "networkidle2" });
 
-    return rating || null;
+    
+    const ratingSelector = ".rating-number";
+
+   
+    await page.waitForSelector(ratingSelector, { timeout: 10000 }); // 10-second timeout
+
+    const rating = await page.$eval(ratingSelector, (el) => el.textContent.trim());
+
+    return rating || null; 
+
   } catch (e) {
-    console.error("Error fetching rating:", e.message);
-    return null;
+    console.error(`Error scraping rating for user "${username}":`, e.message);
+    return null; 
+  } finally {
+
+    if (browser) {
+      await browser.close();
+    }
   }
 }
 

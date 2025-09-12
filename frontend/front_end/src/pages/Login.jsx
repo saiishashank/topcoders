@@ -30,6 +30,7 @@ function Login() {
   };
 
   return (
+    <div className="login-page">
     <div className="login-container">
       <h1>Welcome Back!</h1>
       <p>Please enter your details to log in.</p>
@@ -89,6 +90,7 @@ function Login() {
         </p>
       </div>
     </div>
+  </div>
   );
 }
 

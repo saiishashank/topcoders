@@ -10,26 +10,24 @@
   --error-color: #d93025;
   --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
-
-/* Apply a background to the whole page and center the form */
-/* You might want to put this in your global index.css file */
-body {
-  background-color: var(--background-blue);
+.signup-page {
+  height: 100%; 
+  width: 100%;;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  font-family: 'Poppins', sans-serif;
-  padding: 20px;
+  flex-direction: column;
+  margin: 0; 
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f4f7f6;
 }
-
 /* --- Form Container --- */
 .signup-container {
   background-color: var(--white-color);
   padding: 40px;
+  width: 100%;
   border-radius: 12px;
   box-shadow: var(--shadow);
-  width: 100%;
   max-width: 420px;
   text-align: center;
 }

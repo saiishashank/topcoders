@@ -53,7 +53,7 @@ function Navbar() {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     
-    navigate('/login');
+    navigate('/');
   };
 
   return (

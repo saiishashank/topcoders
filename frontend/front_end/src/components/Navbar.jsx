@@ -1,5 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Code } from 'lucide-react';
 import '../css/Navbar.css';
 
 function Navbar() {
@@ -59,7 +60,15 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <Link to="/dashboard">TopCoders</Link>
+        <Link to="/dashboard" className="logo-link">
+          <div className="logo-icon-wrapper max-h-fit">
+            <Code className="logo-icon" />
+          </div>
+          <span className="logo-text">Topcoders</span>
+        </Link>
+
+        <Link to="/competitions">Competitions</Link>
+
       </div>
       <div className="navbar-user">
         <button onClick={toggleDropdown} className="username-button">

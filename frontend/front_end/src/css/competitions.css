@@ -1,0 +1,74 @@
+/* src/css/Competitions.css */
+
+.competitions-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.contests-list {
+  display: grid;
+  /* Creates a responsive column layout */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem; /* Space between cards */
+}
+
+.contest-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.contest-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.contest-name a {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0056b3;
+  text-decoration: none;
+}
+
+.contest-name a:hover {
+  text-decoration: underline;
+}
+
+.contest-time {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: auto; /* Pushes the time to the bottom of the card */
+}
+
+.platform-badge {
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  color: #fff;
+  width: fit-content;
+}
+
+/* Specific colors for each platform */
+.platform-badge.codechef {
+  background-color: #7B3F00; /* Brown */
+}
+
+.platform-badge.codeforces {
+  background-color: #1F83A8; /* Blue-ish */
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import Navbar from "../components/Navbar";
+import { useParams, Link } from "react-router-dom";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -54,6 +55,7 @@ const createCombinedData = (historyData) => {
 };
 
 const RatingGraph = ({ token }) => {
+ const { username } = useParams();
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -65,10 +67,12 @@ const RatingGraph = ({ token }) => {
         setLoading(false);
         return;
       }
-
+      const apiUrl = username
+        ? `http://localhost:5000/api/user/${username}/getratinghistory`
+        : "http://localhost:5000/api/user/me/getmyratinghistory";
       try {
         const response = await fetch(
-          "http://localhost:5000/api/user/me/getmyratinghistory",
+          apiUrl,
           {
             method: "GET",
             headers: {
@@ -85,7 +89,7 @@ const RatingGraph = ({ token }) => {
 
         const historyData = await response.json();
 
-        if (historyData.length === 0) {
+          if (!Array.isArray(historyData) || historyData.length === 0) {
           throw new Error("No rating history found for this user.");
         }
 
@@ -111,7 +115,7 @@ const RatingGraph = ({ token }) => {
     };
 
     fetchRatingHistory();
-  }, [token]);
+  }, [token, username]);
 
   const options = {
     responsive: true,
@@ -132,6 +136,7 @@ const RatingGraph = ({ token }) => {
     <>
       <Navbar />
       <div className="pageWrapper">
+      <h1 className=" font-semibold text-2xl">{username ? username : "Your"} Rating</h1>
         <div className="chartContainer">
           {loading && <p>Loading Chart...</p>}
           {error && <p className="errorText">Error: {error}</p>}

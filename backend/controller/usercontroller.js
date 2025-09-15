@@ -4,6 +4,7 @@ const secret_key = "SAI@SECRET_KEY";
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
 const { scrapeCodechefRating } = require("../utils/codechefrating");
+
 const getallusers = async (req, res) => {
   try {
     const query = "select * from users";
@@ -116,11 +117,11 @@ const updateAllUserRatings = async (req, res) => {
   }
 };
 
-const getRatingHistoryById = async (req, res) => {
+const getRatingHistoryByUsername = async (req, res) => {
   try {
-    const userId = req.params.id;
-    const query = "SELECT platform, rating, contest_date FROM rating_history WHERE user_id = ? ORDER BY contest_date ASC";
-    const history = await db.query(query, [userId]);
+    const username = req.params.username;
+    const query = "SELECT platform, rating, contest_date FROM rating_history WHERE user_id = (SELECT id FROM users WHERE username = ?) ORDER BY contest_date ASC";
+    const history = await db.query(query, [username]);
     res.json(history);
   } catch (err) {
     console.error("Error fetching rating history:", err);
@@ -153,6 +154,7 @@ const getMyRatingHistory = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch rating history." });
   }
 };
+
 module.exports = {
   getallusers,
   getuserbyid,
@@ -161,6 +163,7 @@ module.exports = {
   getme,
   getrating,
   updateAllUserRatings,
-  getRatingHistoryById,
-  getMyRatingHistory
+  getRatingHistoryByUsername,
+  getMyRatingHistory,
+ 
 };

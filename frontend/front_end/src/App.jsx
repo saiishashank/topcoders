@@ -7,6 +7,7 @@ import Homepage from './pages/HomePage';
 import Dashboard from './components/Dashboard';
 import RatingGraph from './pages/ratinggraph';
 import Navbar from './components/Navbar';
+import Competitions from './pages/competitions';
 function App() {
   return (
     <>
@@ -19,7 +20,12 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path='/graph' element={<RatingGraph token={localStorage.getItem("token")}/>}/>
+        <Route 
+            path="/user/:username" 
+            element={<RatingGraph token={localStorage.getItem("token")} />} 
+          />
         <Route path='/navbar' element={<Navbar/>}/>
+        <Route path='/competitions' element={<Competitions/>}/>
       </Routes>
       
     </>

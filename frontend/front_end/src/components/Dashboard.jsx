@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../css/Dashboard.css";
 import { Link } from "react-router-dom";
+import{Filter} from 'lucide-react'
 import Navbar from "./Navbar";
 
 function Dashboard() {
@@ -111,7 +112,9 @@ function Dashboard() {
           <tbody>
             {userData.map((user) => (
               <tr key={user.username}>
-                <td>{user.username}</td>
+                <td> <Link to={`/user/${user.username}`} className="user-link">
+    {user.username}
+  </Link></td>
                 <td>{user.codeforces_rating || 'N/A'}</td>
                 <td>{user.codechef_rating || 'N/A'}</td>
                 <td>{(parseInt(user.codeforces_rating) || 0) + (parseInt(user.codechef_rating) || 0)}</td>

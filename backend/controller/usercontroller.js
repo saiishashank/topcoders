@@ -1,13 +1,14 @@
 const db = require("../database");
 const bcrypt = require("bcrypt");
-const secret_key = "SAI@SECRET_KEY";
+// NOTE: It's better to load this from process.env like your DB credentials
+const secret_key = process.env.JWT_SECRET || "SAI@SECRET_KEY"; 
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
 const { scrapeCodechefRating } = require("../utils/codechefrating");
 
 const getallusers = async (req, res) => {
   try {
-    const query = "select * from users";
+    const query = "SELECT * FROM users"; // NO CHANGE: No parameters
     const result = await db.query(query);
     return res.send(result);
   } catch (err) {
@@ -15,10 +16,11 @@ const getallusers = async (req, res) => {
     res.send("error fetching users");
   }
 };
+
 const getuserbyid = async (req, res) => {
   try {
     const id = req.params.id;
-    const query = "select * from users where id=?";
+    const query = "SELECT * FROM users WHERE id=$1"; // CHANGED: Replaced ? with $1
     const result = await db.query(query, [id]);
     res.send(result);
   } catch (err) {
@@ -31,7 +33,8 @@ const updateuser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const id = req.params.id;
-    const query = "update users set email=?, password=? where id=?";
+    // CHANGED: Replaced ?, ?, ? with $1, $2, $3
+    const query = "UPDATE users SET email=$1, password=$2 WHERE id=$3"; 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
     const result = await db.query(query, [email, hash, id]);
@@ -47,26 +50,28 @@ const updateuser = async (req, res) => {
 
 const deleteuser = async (req, res) => {
   const id = req.params.id;
-  const query = "delete from users where id=?";
+  const query = "DELETE FROM users WHERE id=$1"; // CHANGED: Replaced ? with $1
   const result = await db.query(query, [id]);
   res.send({
     msg: "user deleted successfully",
   });
 };
+
 const getme = async (req, res) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token, secret_key);
-    const user = await db.query("select * from users where id=?", [decoded.id]);
+    const user = await db.query("SELECT * FROM users WHERE id=$1", [decoded.id]); // CHANGED: Replaced ? with $1
     res.send(user);
   } catch (err) {
     console.log("error fetching user data", err);
   }
 };
+
 const getrating = async (req, res) => {
   try {
-    const query =
-      "SELECT username, codechefProfile, codeforcesProfile, codechef_rating, codeforces_rating FROM users";
+    // NO CHANGE: No parameters
+    const query = "SELECT username, \"codechefProfile\", \"codeforcesProfile\", \"codechef_rating\", \"codeforces_rating\" FROM users";
     const users = await db.query(query);
     res.json({ users });
   } catch (err) {
@@ -76,7 +81,7 @@ const getrating = async (req, res) => {
 
 const updateAllUserRatings = async (req, res) => {
   try {
-    const users = await db.query("SELECT id, codechefProfile, codeforcesProfile FROM users");
+    const users = await db.query("SELECT id, \"codechefProfile\", \"codeforcesProfile\" FROM users"); // NO CHANGE: No parameters
     if (!users || users.length === 0) {
       return res.status(404).json({ error: "No users found to update" });
     }
@@ -84,7 +89,6 @@ const updateAllUserRatings = async (req, res) => {
     for (const user of users) {
       const today = new Date();
 
-      // Codeforces Snapshot Logic
       if (user.codeforcesProfile) {
         try {
           const cfResponse = await axios.get(`https://codeforces.com/api/user.rating?handle=${user.codeforcesProfile}`);
@@ -92,20 +96,23 @@ const updateAllUserRatings = async (req, res) => {
             const cfHistory = cfResponse.data.result;
             if (cfHistory && cfHistory.length > 0) {
               const latestRating = cfHistory[cfHistory.length - 1].newRating;
-              await db.query("UPDATE users SET codeforces_rating = ? WHERE id = ?", [latestRating.toString(), user.id]);
-              await db.query("INSERT INTO rating_history (user_id, platform, rating, contest_date) VALUES (?, ?, ?, ?)", [user.id, "codeforces", latestRating, today]);
+              // CHANGED: Replaced ?, ? with $1, $2
+              await db.query("UPDATE users SET \"codeforces_rating\" = $1 WHERE id = $2", [latestRating.toString(), user.id]);
+              // CHANGED: Replaced ?, ?, ?, ? with $1, $2, $3, $4
+              await db.query("INSERT INTO rating_history (user_id, platform, rating, contest_date) VALUES ($1, $2, $3, $4)", [user.id, "codeforces", latestRating, today]);
             }
           }
         } catch (err) { console.error(`Error for Codeforces user ${user.codeforcesProfile}:`, err.message); }
       }
 
-      // CodeChef Snapshot Logic
       if (user.codechefProfile) {
         try {
           const rating = await scrapeCodechefRating(user.codechefProfile);
           if (rating) {
-            await db.query("UPDATE users SET codechef_rating = ? WHERE id = ?", [rating.toString(), user.id]);
-            await db.query("INSERT INTO rating_history (user_id, platform, rating, contest_date) VALUES (?, ?, ?, ?)", [user.id, "codechef", rating, today]);
+            // CHANGED: Replaced ?, ? with $1, $2
+            await db.query("UPDATE users SET codechef_rating = $1 WHERE id = $2", [rating.toString(), user.id]);
+            // CHANGED: Replaced ?, ?, ?, ? with $1, $2, $3, $4
+            await db.query("INSERT INTO rating_history (user_id, platform, rating, contest_date) VALUES ($1, $2, $3, $4)", [user.id, "codechef", rating, today]);
           }
         } catch (err) { console.error(`Error for CodeChef user ${user.codechefProfile}:`, err.message); }
       }
@@ -119,8 +126,9 @@ const updateAllUserRatings = async (req, res) => {
 
 const getRatingHistoryByUsername = async (req, res) => {
   try {
-    const username = req.params.username;
-    const query = "SELECT platform, rating, contest_date FROM rating_history WHERE user_id = (SELECT id FROM users WHERE username = ?) ORDER BY contest_date ASC";
+    const { username } = req.params;
+    // CHANGED: Replaced ? with $1
+    const query = "SELECT platform, rating, contest_date FROM rating_history WHERE user_id = (SELECT id FROM users WHERE username = $1) ORDER BY contest_date ASC";
     const history = await db.query(query, [username]);
     res.json(history);
   } catch (err) {
@@ -131,18 +139,16 @@ const getRatingHistoryByUsername = async (req, res) => {
 
 const getMyRatingHistory = async (req, res) => {
   try {
-    // 1. Get token from the Authorization header
     const token = req.headers.authorization.split(" ")[1];
     if (!token) {
       return res.status(401).json({ message: "No token provided." });
     }
 
-    // 2. Verify the token to get the user's ID
     const decoded = jwt.verify(token, secret_key);
     const userId = decoded.id;
 
-    // 3. Fetch history using the ID from the token
-    const query = "SELECT platform, rating, contest_date FROM rating_history WHERE user_id = ? ORDER BY contest_date ASC";
+    // CHANGED: Replaced ? with $1
+    const query = "SELECT platform, rating, contest_date FROM rating_history WHERE user_id = $1 ORDER BY contest_date ASC";
     const history = await db.query(query, [userId]);
 
     res.json(history);
@@ -165,5 +171,4 @@ module.exports = {
   updateAllUserRatings,
   getRatingHistoryByUsername,
   getMyRatingHistory,
- 
 };

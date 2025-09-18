@@ -1,18 +1,24 @@
+require('dotenv').config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const db = require("../database");
-const secret_key = "SAI@SECRET_KEY";
+const secret_key = process.env.SECRET_KEY;
 
 const register = async (req, res) => {
   const { username, email, password, codeforcesProfile, codechefProfile } = req.body;
   try {
-    const query =
-      "INSERT INTO users (username,email,password,codeforcesProfile,codechefProfile) VALUES (?,?,?,?,?)";
+      const query =
+      "INSERT INTO users (username, email, password, \"codeforcesProfile\", \"codechefProfile\") VALUES ($1, $2, $3, $4, $5) RETURNING id";
+    
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
+
     const result = await db.query(query, [username, email, hash, codeforcesProfile, codechefProfile]);
+
+      const newUserId = result[0].id;
+
     const payload = {
-      id: result.insertId,
+      id: newUserId, 
       email: email,
       username: username,
       codeforcesProfile: codeforcesProfile,
@@ -22,7 +28,7 @@ const register = async (req, res) => {
     const token = jwt.sign(payload, secret_key, {
       expiresIn: "1h",
     });
-   
+    
     res.status(201).send({
       msg: "successfully registered",
       token: token,
@@ -32,12 +38,13 @@ const register = async (req, res) => {
     res.status(500).send("server error");
   }
 };
+
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const query = "select * from users where email=?";
-  const result = await db.query(query, [email]);
+  const query = "SELECT * FROM users WHERE email=$1"; 
   try {
-    if (result.length == 0) {
+    const result = await db.query(query, [email]);
+    if (result.length === 0) {
       return res.status(400).send("user not found");
     }
     const user = result[0];
@@ -66,6 +73,7 @@ const login = async (req, res) => {
 };
 
 const protect = (req, res, next) => {
+ 
   let token;
   if (
     req.headers.authorization &&
@@ -84,18 +92,6 @@ const protect = (req, res, next) => {
   if (!token) {
     res.send("not authorized, no token provided");
   }
-   
 };
-/*
-const authorise = (...roles) => {
-  return (req, res, next) => {
-    if (!req.user || !roles.includes(req.user.role)) {
-      console.log(req.user.role);
-      return res.send(" not authorised");
-    }
-    next();
-  };
-};
-*/
 
 module.exports = { register, login, protect };

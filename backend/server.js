@@ -3,7 +3,6 @@ const app = express();
 const cors=require('cors');
 const authroutes = require("./routes/authroutes");
 const userroutes = require("./routes/userroutes");
-
 app.use(express.json());
 app.use(cors());
 

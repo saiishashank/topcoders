@@ -13,7 +13,7 @@ export function Header() {
         </div>
         <nav className="hidden md:flex items-center space-x-6">
           <a href="#community" className="text-muted-foreground hover:text-foreground transition-colors">Community</a>
-          <a href="#competitions" className="text-muted-foreground hover:text-foreground transition-colors">Competitions</a>
+          <Link to="/competitions" className="text-muted-foreground hover:text-foreground transition-colors">Competitions</Link>
           <a href="#tracking" className="text-muted-foreground hover:text-foreground transition-colors">Progress</a>
           <a href="#leaderboard" className="text-muted-foreground hover:text-foreground transition-colors">Leaderboard</a>
         </nav>

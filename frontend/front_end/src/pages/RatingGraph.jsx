@@ -68,8 +68,8 @@ const RatingGraph = ({ token }) => {
         return;
       }
       const apiUrl = username
-        ? `http://localhost:5000/api/user/${username}/getratinghistory`
-        : "http://localhost:5000/api/user/me/getmyratinghistory";
+        ? `https://topcoders.onrender.com/api/user/${username}/getratinghistory`
+        : "https://topcoders.onrender.com/api/user/me/getmyratinghistory";
       try {
         const response = await fetch(
           apiUrl,

@@ -5,7 +5,7 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Homepage from './pages/HomePage';
 import Dashboard from './components/Dashboard';
-import RatingGraph from './pages/ratinggraph';
+import RatingGraph from './pages/RatingGraph';
 import Navbar from './components/Navbar';
 import Competitions from './pages/competitions';
 function App() {

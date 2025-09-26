@@ -16,7 +16,7 @@ function Dashboard() {
     const token = localStorage.getItem("token");
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/user/getrating", {
+        const response = await axios.get(" https://topcoders.onrender.com/api/user/getrating", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,

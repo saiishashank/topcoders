@@ -18,7 +18,7 @@ function Navbar() {
 
     const fetchdata = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/user/getme", {
+        const res = await fetch("https://topcoders.onrender.com/api/user/getme", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

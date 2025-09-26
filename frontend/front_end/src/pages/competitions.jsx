@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar'; 
-import '../css/Competitions.css';
+import '../css/competitions.css';
 
 function Competitions() {
   const [contests, setContests] = useState([]);

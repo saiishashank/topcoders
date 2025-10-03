@@ -16,7 +16,7 @@ function Competitions() {
         setError(null);
 
         
-        const proxyUrl = "https://cors-anywhere.com/";
+        const proxyUrl = "https://cors-anywhere.herokuapp.com/";
         
         
         const [codechefResponse, codeforcesResponse] = await Promise.all([

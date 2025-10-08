@@ -16,7 +16,7 @@ function SignUp() {
     let res;
     try {
       res = await axios.post(
-        "https://topcoders.onrender.com/auth/register",
+        "https://topcoders.onrender.com/api/auth/register",
         data
       );
       localStorage.setItem("token", res.data.token);
